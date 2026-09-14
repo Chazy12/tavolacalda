@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Generatore Licenze - Gestionale Tavola Calda | Tiziano Franceschini</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap">
+  <style>
+    :root {
+      --bg: #0B0F19;
+      --card-bg: #151D2F;
+      --border: #243049;
+      --primary: #D97706;
+      --primary-hover: #B45309;
+      --accent: #10B981;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .badge-author {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(217, 119, 6, 0.15);
+      color: #FCD34D;
+      border: 1px solid rgba(217, 119, 6, 0.35);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 0.35rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 2.25rem;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group {
+      margin-bottom: 1.35rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #CBD5E1;
+      margin-bottom: 0.45rem;
+    }
+
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: #0B0F19;
+      color: #FFFFFF;
+      font-size: 0.98rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus, input[type="email"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.25);
+    }
+
+    .btn-generate {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, #EA580C 100%);
+      color: #FFFFFF;
+      border: none;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .btn-generate:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(217, 119, 6, 0.45);
+    }
+
+    /* Risultato Licenza */
+    .result-section {
+      display: none;
+      margin-top: 2rem;
+      padding-top: 1.75rem;
+      border-top: 1px dashed var(--border);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .license-display-box {
+      background: #0B0F19;
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      padding: 1.25rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .license-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .license-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 2px;
+      word-break: break-all;
+    }
+
+    .btn-copy {
+      background: #1E293B;
+      color: #F8FAFC;
+      border: 1px solid #334155;
+      padding: 0.65rem 1.15rem;
+      border-radius: 9px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: #334155;
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .msg-template-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.15rem;
+      margin-top: 1.25rem;
+    }
+
+    .msg-template-text {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #CBD5E1;
+      white-space: pre-wrap;
+      background: #0B0F19;
+      padding: 0.85rem;
+      border-radius: 8px;
+      margin: 0.65rem 0;
+      font-family: inherit;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.82rem;
+      color: #64748B;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-box">
+      <div style="margin-bottom: 1rem;">
+        <img src="/assets/logo-timbro.png" onerror="this.src='logo timbro.png'" alt="Logo Tiziano Franceschini" style="width: 74px; height: 74px; border-radius: 16px; background: #FFFFFF; padding: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.4); object-fit: contain; display: inline-block;">
+      </div>
+      <div class="badge-author">⚡ Strumento Riservato • Tiziano Franceschini</div>
+      <h1>Generatore di Licenze</h1>
+      <p class="subtitle">Gestionale Tavola Calda • Attivazione Licenze Clienti</p>
+    </div>
+
+    <div class="card">
+      <form id="license-form" onsubmit="handleGenerate(event)">
+        <div class="form-group">
+          <label for="holder-name">👤 Nome Cliente / Intestatario Attività:</label>
+          <input type="text" id="holder-name" placeholder="Es. La Mia Tavola Calda" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="holder-email">✉️ Indirizzo Email Cliente:</label>
+          <input type="email" id="holder-email" placeholder="Es. info@miatavolacalda.it" required autocomplete="off">
+        </div>
+
+        <button type="submit" class="btn-generate">
+          <span>⚡</span> Genera Codice di Licenza
+        </button>
+      </form>
+
+      <!-- Risultato generazione -->
+      <div class="result-section" id="result-box">
+        <div class="license-display-box">
+          <div class="license-label">✓ Licenza Ufficiale Generata</div>
+          <div class="license-code" id="license-key-output">TCN-XXXX-XXXX-XXXX-XXXX</div>
+          <div style="margin-top: 0.85rem;">
+            <button type="button" class="btn-copy" onclick="copyOnlyKey()">
+              📋 Copia Solo Codice Licenza
+            </button>
+          </div>
+        </div>
+
+        <div class="msg-template-box">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-size: 0.88rem; color: #F8FAFC;">✉️ Messaggio Pronto da Inviare al Cliente:</strong>
+            <button type="button" class="btn-copy" onclick="copyFullMessage()">
+              📋 Copia Tutto
+            </button>
+          </div>
+          <div class="msg-template-text" id="msg-template-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Programma creato da Tiziano Franceschini • Tutti i diritti riservati
+    </div>
+  </div>
+
+  <script>
+    const SECRET_SALT = "TIZIANO-FRANCESCHINI-TAVOLA-CALDA-NARDELLI-2026";
+
+    // Calcolo SHA-256 nativo client-side tramite Web Crypto API
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    async function generateLicenseKey(holder, email) {
+      const cleanHolder = holder.trim().toLowerCase();
+      const cleanEmail = email.trim().toLowerCase();
+      const payload = `${cleanHolder}::${cleanEmail}::${SECRET_SALT}`;
+      
+      const hash = await sha256(payload);
+      const block1 = hash.substring(0, 4);
+      const block2 = hash.substring(4, 8);
+      const block3 = hash.substring(8, 12);
+      const block4 = hash.substring(12, 16);
+      
+      return `TCN-${block1}-${block2}-${block3}-${block4}`;
+    }
+
+    let currentGeneratedKey = '';
+    let currentHolder = '';
+    let currentEmail = '';
+
+    async function handleGenerate(e) {
+      e.preventDefault();
+      currentHolder = document.getElementById('holder-name').value.trim();
+      currentEmail = document.getElementById('holder-email').value.trim();
+
+      if (!currentHolder || !currentEmail) {
+        alert('Compila sia il nome che l\'email del cliente.');
+        return;
+      }
+
+      currentGeneratedKey = await generateLicenseKey(currentHolder, currentEmail);
+
+      document.getElementById('license-key-output').textContent = currentGeneratedKey;
+
+      const template = `Gentile ${currentHolder},
+ecco i tuoi dati ufficiali di attivazione per il Gestionale Tavola Calda:
+
+• Intestatario: ${currentHolder}
+• Email: ${currentEmail}
+• Codice Licenza: ${currentGeneratedKey}
+
+Inserisci questi dati nella schermata iniziale di attivazione per sbloccare il programma.
+Assistenza e sviluppo: Tiziano Franceschini`;
+
+      document.getElementById('msg-template-content').textContent = template;
+      document.getElementById('result-box').style.display = 'block';
+
+      // Scorrimento fluido verso il risultato
+      document.getElementById('result-box').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyOnlyKey() {
+      if (!currentGeneratedKey) return;
+      navigator.clipboard.writeText(currentGeneratedKey).then(() => {
+        alert('✅ Codice licenza copiato negli appunti: ' + currentGeneratedKey);
+      });
+    }
+
+    function copyFullMessage() {
+      const msg = document.getElementById('msg-template-content').textContent;
+      if (!msg) return;
+      navigator.clipboard.writeText(msg).then(() => {
+        alert('✅ Messaggio completo per il cliente copiato negli appunti!');
+      });
+    }
+  </script>
+</body>
+</html>
